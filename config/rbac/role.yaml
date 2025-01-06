@@ -1,0 +1,32 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - eol.endoflife.io
+  resources:
+  - productchecks
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - eol.endoflife.io
+  resources:
+  - productchecks/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - eol.endoflife.io
+  resources:
+  - productchecks/status
+  verbs:
+  - get
+  - patch
+  - update

@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- eol_v1_productcheck.yaml
+# +kubebuilder:scaffold:manifestskustomizesamples
