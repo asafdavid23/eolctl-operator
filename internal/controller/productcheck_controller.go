@@ -25,9 +25,9 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	eolctl "github.com/asafdavid23/eolctl"
 	"github.com/asafdavid23/eolctl-operator/api/v1alpha1"
 	productsv1alpha1 "github.com/asafdavid23/eolctl-operator/api/v1alpha1"
+	eolctl "github.com/asafdavid23/eolctl/pkg/helpers"
 )
 
 // ProductCheckReconciler reconciles a ProductCheck object
@@ -69,6 +69,11 @@ func (r *ProductCheckReconciler) Reconcile(ctx context.Context, req ctrl.Request
 	productCheck.Status.Message = message
 	productCheck.Status.CheckdAt = time.Now()
 
+	if err := r.Status().Update(ctx, &productCheck); err != nil {
+		return ctrl.Result{}, err
+	}
+
+	return ctrl.Result{RequeueAfter: 24 * time.Hour}, nil
 }
 
 // SetupWithManager sets up the controller with the Manager.
