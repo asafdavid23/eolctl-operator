@@ -8,7 +8,7 @@ metadata:
   name: productcheck-viewer-role
 rules:
 - apiGroups:
-  - products.eolctl.io
+  - eol.endoflife.io
   resources:
   - productchecks
   verbs:
@@ -16,7 +16,7 @@ rules:
   - list
   - watch
 - apiGroups:
-  - products.eolctl.io
+  - eol.endoflife.io
   resources:
   - productchecks/status
   verbs:

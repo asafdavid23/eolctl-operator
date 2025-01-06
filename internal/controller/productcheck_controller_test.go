@@ -1,5 +1,5 @@
 /*
-Copyright 2024.
+Copyright 2025.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	productsv1alpha1 "github.com/asafdavid23/eolctl-operator/api/v1alpha1"
+	eolv1 "github.com/asafdavid23/endoflife-operator/api/v1"
 )
 
 var _ = Describe("ProductCheck Controller", func() {
@@ -40,13 +40,13 @@ var _ = Describe("ProductCheck Controller", func() {
 			Name:      resourceName,
 			Namespace: "default", // TODO(user):Modify as needed
 		}
-		productcheck := &productsv1alpha1.ProductCheck{}
+		productcheck := &eolv1.ProductCheck{}
 
 		BeforeEach(func() {
 			By("creating the custom resource for the Kind ProductCheck")
 			err := k8sClient.Get(ctx, typeNamespacedName, productcheck)
 			if err != nil && errors.IsNotFound(err) {
-				resource := &productsv1alpha1.ProductCheck{
+				resource := &eolv1.ProductCheck{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
 						Namespace: "default",
@@ -59,7 +59,7 @@ var _ = Describe("ProductCheck Controller", func() {
 
 		AfterEach(func() {
 			// TODO(user): Cleanup logic after each test, like removing the resource instance.
-			resource := &productsv1alpha1.ProductCheck{}
+			resource := &eolv1.ProductCheck{}
 			err := k8sClient.Get(ctx, typeNamespacedName, resource)
 			Expect(err).NotTo(HaveOccurred())
 

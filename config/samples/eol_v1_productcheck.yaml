@@ -1,4 +1,4 @@
-apiVersion: products.eolctl.io/v1alpha1
+apiVersion: eol.endoflife.io/v1
 kind: ProductCheck
 metadata:
   labels:

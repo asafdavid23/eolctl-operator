@@ -1,5 +1,5 @@
 /*
-Copyright 2024.
+Copyright 2025.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,14 +20,14 @@ import (
 	"context"
 	"time"
 
-	"k8s.io/apimachinery/pkg/api/errors"
+	eolctl "github.com/asafdavid23/eolctl/pkg/helpers"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	"github.com/asafdavid23/eolctl-operator/api/v1alpha1"
-	productsv1alpha1 "github.com/asafdavid23/eolctl-operator/api/v1alpha1"
-	eolctl "github.com/asafdavid23/eolctl/pkg/helpers"
+	eolv1 "github.com/asafdavid23/endoflife-operator/api/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // ProductCheckReconciler reconciles a ProductCheck object
@@ -36,9 +36,9 @@ type ProductCheckReconciler struct {
 	Scheme *runtime.Scheme
 }
 
-// +kubebuilder:rbac:groups=products.eolctl.io,resources=productchecks,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=products.eolctl.io,resources=productchecks/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=products.eolctl.io,resources=productchecks/finalizers,verbs=update
+// +kubebuilder:rbac:groups=eol.endoflife.io,resources=productchecks,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=eol.endoflife.io,resources=productchecks/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=eol.endoflife.io,resources=productchecks/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -50,24 +50,26 @@ type ProductCheckReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.18.4/pkg/reconcile
 func (r *ProductCheckReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	var productCheck v1alpha1.ProductCheck
-
+	// Fetch the ProductCheck instance
+	var productCheck eolv1.ProductCheck
 	if err := r.Get(ctx, req.NamespacedName, &productCheck); err != nil {
-		if errors.IsNotFound(err) {
-			return ctrl.Result{}, nil
-		}
-		return ctrl.Result{}, err
+		logger := log.FromContext(ctx)
+		logger.Error(err, "unable to fetch ProductCheck")
+		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	isEOL, message, err := eolctl.CheckProductEOL(productCheck.Spec.ProductName, productCheck.Spec.Version)
+	// Call your Go CLI logic here - you might need to run a subprocess or integrate with your existing CLI function.
+	// For example, if your CLI tool is invoked using flags, you can replicate that logic in the operator
+	isEOL, message, err := eolctl.CheckProductEOL(productCheck.Spec.Name, productCheck.Spec.Version)
 
 	if err != nil {
 		return ctrl.Result{}, err
 	}
 
+	// Update the status of the CR
 	productCheck.Status.IsEOL = isEOL
 	productCheck.Status.Message = message
-	productCheck.Status.CheckdAt = time.Now()
+	productCheck.Status.CheckdAt = metav1.Now()
 
 	if err := r.Status().Update(ctx, &productCheck); err != nil {
 		return ctrl.Result{}, err
@@ -79,6 +81,6 @@ func (r *ProductCheckReconciler) Reconcile(ctx context.Context, req ctrl.Request
 // SetupWithManager sets up the controller with the Manager.
 func (r *ProductCheckReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&productsv1alpha1.ProductCheck{}).
+		For(&eolv1.ProductCheck{}).
 		Complete(r)
 }

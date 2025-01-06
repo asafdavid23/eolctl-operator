@@ -8,7 +8,7 @@ metadata:
   name: productcheck-editor-role
 rules:
 - apiGroups:
-  - products.eolctl.io
+  - eol.endoflife.io
   resources:
   - productchecks
   verbs:
@@ -20,7 +20,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - products.eolctl.io
+  - eol.endoflife.io
   resources:
   - productchecks/status
   verbs:

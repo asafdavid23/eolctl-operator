@@ -1,5 +1,5 @@
 /*
-Copyright 2024.
+Copyright 2025.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,11 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package v1alpha1
+package v1
 
 import (
-	"time"
-
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -27,15 +25,16 @@ import (
 
 // ProductCheckSpec defines the desired state of ProductCheck
 type ProductCheckSpec struct {
-	ProductName string `json:"productName"`
-	Version     string `json:"version"`
+	// Add fields specific to your CLI tool's functionality
+	Name    string `json:"name"`
+	Version string `json:"version"`
 }
 
 // ProductCheckStatus defines the observed state of ProductCheck
 type ProductCheckStatus struct {
-	IsEOL    bool      `json:"isEOL"`
-	Message  string    `json:"message,omitempty"`
-	CheckdAt time.Time `json:"checkedAt,omitempty"`
+	IsEOL    bool        `json:"isEOL"`
+	Message  string      `json:"message,omitempty"`
+	CheckdAt metav1.Time `json:"checkedAt,omitempty"`
 }
 
 // +kubebuilder:object:root=true

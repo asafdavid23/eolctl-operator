@@ -1,5 +1,5 @@
 /*
-Copyright 2024.
+Copyright 2025.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -35,8 +35,8 @@ import (
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
-	productsv1alpha1 "github.com/asafdavid23/eolctl-operator/api/v1alpha1"
-	"github.com/asafdavid23/eolctl-operator/internal/controller"
+	eolv1 "github.com/asafdavid23/endoflife-operator/api/v1"
+	"github.com/asafdavid23/endoflife-operator/internal/controller"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -48,7 +48,7 @@ var (
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 
-	utilruntime.Must(productsv1alpha1.AddToScheme(scheme))
+	utilruntime.Must(eolv1.AddToScheme(scheme))
 	// +kubebuilder:scaffold:scheme
 }
 
@@ -126,7 +126,7 @@ func main() {
 		WebhookServer:          webhookServer,
 		HealthProbeBindAddress: probeAddr,
 		LeaderElection:         enableLeaderElection,
-		LeaderElectionID:       "fc9b9c69.eolctl.io",
+		LeaderElectionID:       "fc667362.endoflife.io",
 		// LeaderElectionReleaseOnCancel defines if the leader should step down voluntarily
 		// when the Manager ends. This requires the binary to immediately end when the
 		// Manager is stopped, otherwise, this setting is unsafe. Setting this significantly
