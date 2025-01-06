@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+	"time"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -32,7 +33,7 @@ import (
 
 var _ = Describe("ProductCheck Controller", func() {
 	Context("When reconciling a resource", func() {
-		const resourceName = "test-resource"
+		const resourceName = "python"
 
 		ctx := context.Background()
 
@@ -52,7 +53,12 @@ var _ = Describe("ProductCheck Controller", func() {
 						Namespace: "default",
 					},
 					// TODO(user): Specify other spec details if needed.
+					Spec: eolv1.ProductCheckSpec{
+						Name:    "python",
+						Version: "3.10",
+					},
 				}
+				resource.Status.CheckdAt = metav1.Time{Time: time.Now()}
 				Expect(k8sClient.Create(ctx, resource)).To(Succeed())
 			}
 		})
