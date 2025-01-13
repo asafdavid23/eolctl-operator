@@ -17,7 +17,11 @@ limitations under the License.
 package v1
 
 import (
+	"log"
+	"os"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes/scheme"
 )
 
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
@@ -60,4 +64,9 @@ type ProductCheckList struct {
 
 func init() {
 	SchemeBuilder.Register(&ProductCheck{}, &ProductCheckList{})
+
+	if err := scheme.AddToScheme(scheme.Scheme); err != nil {
+		log.Printf("%t Unable to add ProductCheck API to scheme", err)
+		os.Exit(1)
+	}
 }

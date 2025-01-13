@@ -20,14 +20,15 @@ import (
 	"context"
 	"time"
 
+	logging "log"
+
+	eolv1 "github.com/asafdavid23/endoflife-operator/api/v1"
 	eolctl "github.com/asafdavid23/eolctl/pkg/helpers"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
-
-	eolv1 "github.com/asafdavid23/endoflife-operator/api/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // ProductCheckReconciler reconciles a ProductCheck object
@@ -75,6 +76,7 @@ func (r *ProductCheckReconciler) Reconcile(ctx context.Context, req ctrl.Request
 		return ctrl.Result{}, err
 	}
 
+	logging.Printf("ProductCheck %s is updated", productCheck.Spec.Name)
 	return ctrl.Result{RequeueAfter: 24 * time.Hour}, nil
 }
 

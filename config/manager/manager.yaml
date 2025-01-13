@@ -63,7 +63,7 @@ spec:
         args:
           - --leader-elect
           - --health-probe-bind-address=:8081
-        image: asafdavid23/endoflife-operator:latest
+        image: asafdavid23/endoflife-operator:v1.0.2
         name: manager
         securityContext:
           allowPrivilegeEscalation: false
